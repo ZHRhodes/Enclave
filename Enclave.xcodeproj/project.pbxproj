@@ -9,11 +9,25 @@
 /* Begin PBXBuildFile section */
 		143DA1F0249B2F0100EEBF55 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA1EF249B2F0100EEBF55 /* AppDelegate.swift */; };
 		143DA1F2249B2F0100EEBF55 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA1F1249B2F0100EEBF55 /* SceneDelegate.swift */; };
-		143DA1F4249B2F0100EEBF55 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA1F3249B2F0100EEBF55 /* ViewController.swift */; };
+		143DA1F4249B2F0100EEBF55 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA1F3249B2F0100EEBF55 /* ListViewController.swift */; };
 		143DA1F7249B2F0100EEBF55 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 143DA1F5249B2F0100EEBF55 /* Main.storyboard */; };
 		143DA1F9249B2F0300EEBF55 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 143DA1F8249B2F0300EEBF55 /* Assets.xcassets */; };
 		143DA1FC249B2F0300EEBF55 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 143DA1FA249B2F0300EEBF55 /* LaunchScreen.storyboard */; };
 		143DA207249B2F0300EEBF55 /* EnclaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA206249B2F0300EEBF55 /* EnclaveTests.swift */; };
+		143DA214249B34DC00EEBF55 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA213249B34DC00EEBF55 /* Note.swift */; };
+		143DA216249B4FC000EEBF55 /* EditItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA215249B4FC000EEBF55 /* EditItemViewController.swift */; };
+		143DA219249B509400EEBF55 /* EditItemInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA218249B509400EEBF55 /* EditItemInteractor.swift */; };
+		143DA21B249B537800EEBF55 /* EditItemCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA21A249B537800EEBF55 /* EditItemCoordinator.swift */; };
+		143DA220249B57C300EEBF55 /* ListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA21F249B57C300EEBF55 /* ListCoordinator.swift */; };
+		143DA222249B5ED000EEBF55 /* ListItemTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143DA221249B5ED000EEBF55 /* ListItemTableCell.swift */; };
+		14861EC4249EF40B00D2FA92 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14861EC3249EF40B00D2FA92 /* DateFormatter+Extensions.swift */; };
+		14861EC7249F1A8800D2FA92 /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14861EC6249F1A8800D2FA92 /* ColorPicker.swift */; };
+		14AB3E5624A1F0340060A9E7 /* SecureEnclave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14AB3E5524A1F0340060A9E7 /* SecureEnclave.swift */; };
+		14B7F114249C3DE1002D290D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14B7F113249C3DE1002D290D /* Colors.xcassets */; };
+		14B7F117249C3E26002D290D /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B7F116249C3E26002D290D /* UIColor+Extensions.swift */; };
+		14B7F11C249C6E8E002D290D /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B7F11B249C6E8E002D290D /* UIFont+Extensions.swift */; };
+		14B7F123249DE7B3002D290D /* Enclave.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 14B7F121249DE7B3002D290D /* Enclave.xcdatamodeld */; };
+		14B7F126249E919D002D290D /* ListViewInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B7F125249E919D002D290D /* ListViewInteractor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +44,7 @@
 		143DA1EC249B2F0100EEBF55 /* Enclave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enclave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		143DA1EF249B2F0100EEBF55 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		143DA1F1249B2F0100EEBF55 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		143DA1F3249B2F0100EEBF55 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		143DA1F3249B2F0100EEBF55 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		143DA1F6249B2F0100EEBF55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		143DA1F8249B2F0300EEBF55 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		143DA1FB249B2F0300EEBF55 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -38,6 +52,20 @@
 		143DA202249B2F0300EEBF55 /* EnclaveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EnclaveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		143DA206249B2F0300EEBF55 /* EnclaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnclaveTests.swift; sourceTree = "<group>"; };
 		143DA208249B2F0300EEBF55 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		143DA213249B34DC00EEBF55 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		143DA215249B4FC000EEBF55 /* EditItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemViewController.swift; sourceTree = "<group>"; };
+		143DA218249B509400EEBF55 /* EditItemInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemInteractor.swift; sourceTree = "<group>"; };
+		143DA21A249B537800EEBF55 /* EditItemCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemCoordinator.swift; sourceTree = "<group>"; };
+		143DA21F249B57C300EEBF55 /* ListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCoordinator.swift; sourceTree = "<group>"; };
+		143DA221249B5ED000EEBF55 /* ListItemTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemTableCell.swift; sourceTree = "<group>"; };
+		14861EC3249EF40B00D2FA92 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		14861EC6249F1A8800D2FA92 /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		14AB3E5524A1F0340060A9E7 /* SecureEnclave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureEnclave.swift; sourceTree = "<group>"; };
+		14B7F113249C3DE1002D290D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		14B7F116249C3E26002D290D /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		14B7F11B249C6E8E002D290D /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
+		14B7F122249DE7B3002D290D /* Enclave.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Enclave.xcdatamodel; sourceTree = "<group>"; };
+		14B7F125249E919D002D290D /* ListViewInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewInteractor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,11 +109,18 @@
 			children = (
 				143DA1EF249B2F0100EEBF55 /* AppDelegate.swift */,
 				143DA1F1249B2F0100EEBF55 /* SceneDelegate.swift */,
-				143DA1F3249B2F0100EEBF55 /* ViewController.swift */,
+				14AB3E5524A1F0340060A9E7 /* SecureEnclave.swift */,
+				14861EC5249F1A5F00D2FA92 /* Views */,
+				14B7F11D249DCE77002D290D /* Models */,
+				143DA21E249B57A700EEBF55 /* List */,
+				143DA217249B503600EEBF55 /* EditItem */,
 				143DA1F5249B2F0100EEBF55 /* Main.storyboard */,
 				143DA1F8249B2F0300EEBF55 /* Assets.xcassets */,
+				14B7F11A249C6E76002D290D /* Extensions */,
+				14B7F115249C3DE8002D290D /* Colors */,
 				143DA1FA249B2F0300EEBF55 /* LaunchScreen.storyboard */,
 				143DA1FD249B2F0300EEBF55 /* Info.plist */,
+				14B7F121249DE7B3002D290D /* Enclave.xcdatamodeld */,
 			);
 			path = Enclave;
 			sourceTree = "<group>";
@@ -97,6 +132,61 @@
 				143DA208249B2F0300EEBF55 /* Info.plist */,
 			);
 			path = EnclaveTests;
+			sourceTree = "<group>";
+		};
+		143DA217249B503600EEBF55 /* EditItem */ = {
+			isa = PBXGroup;
+			children = (
+				143DA215249B4FC000EEBF55 /* EditItemViewController.swift */,
+				143DA218249B509400EEBF55 /* EditItemInteractor.swift */,
+				143DA21A249B537800EEBF55 /* EditItemCoordinator.swift */,
+			);
+			path = EditItem;
+			sourceTree = "<group>";
+		};
+		143DA21E249B57A700EEBF55 /* List */ = {
+			isa = PBXGroup;
+			children = (
+				143DA1F3249B2F0100EEBF55 /* ListViewController.swift */,
+				143DA21F249B57C300EEBF55 /* ListCoordinator.swift */,
+				14B7F125249E919D002D290D /* ListViewInteractor.swift */,
+				143DA221249B5ED000EEBF55 /* ListItemTableCell.swift */,
+			);
+			path = List;
+			sourceTree = "<group>";
+		};
+		14861EC5249F1A5F00D2FA92 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				14861EC6249F1A8800D2FA92 /* ColorPicker.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		14B7F115249C3DE8002D290D /* Colors */ = {
+			isa = PBXGroup;
+			children = (
+				14B7F113249C3DE1002D290D /* Colors.xcassets */,
+				14B7F116249C3E26002D290D /* UIColor+Extensions.swift */,
+			);
+			path = Colors;
+			sourceTree = "<group>";
+		};
+		14B7F11A249C6E76002D290D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				14B7F11B249C6E8E002D290D /* UIFont+Extensions.swift */,
+				14861EC3249EF40B00D2FA92 /* DateFormatter+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		14B7F11D249DCE77002D290D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				143DA213249B34DC00EEBF55 /* Note.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				143DA1FC249B2F0300EEBF55 /* LaunchScreen.storyboard in Resources */,
+				14B7F114249C3DE1002D290D /* Colors.xcassets in Resources */,
 				143DA1F9249B2F0300EEBF55 /* Assets.xcassets in Resources */,
 				143DA1F7249B2F0100EEBF55 /* Main.storyboard in Resources */,
 			);
@@ -200,8 +291,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				143DA1F4249B2F0100EEBF55 /* ViewController.swift in Sources */,
+				143DA214249B34DC00EEBF55 /* Note.swift in Sources */,
+				14B7F11C249C6E8E002D290D /* UIFont+Extensions.swift in Sources */,
+				14861EC7249F1A8800D2FA92 /* ColorPicker.swift in Sources */,
+				14AB3E5624A1F0340060A9E7 /* SecureEnclave.swift in Sources */,
+				14861EC4249EF40B00D2FA92 /* DateFormatter+Extensions.swift in Sources */,
+				143DA216249B4FC000EEBF55 /* EditItemViewController.swift in Sources */,
+				143DA220249B57C300EEBF55 /* ListCoordinator.swift in Sources */,
+				143DA1F4249B2F0100EEBF55 /* ListViewController.swift in Sources */,
 				143DA1F0249B2F0100EEBF55 /* AppDelegate.swift in Sources */,
+				143DA222249B5ED000EEBF55 /* ListItemTableCell.swift in Sources */,
+				14B7F126249E919D002D290D /* ListViewInteractor.swift in Sources */,
+				143DA219249B509400EEBF55 /* EditItemInteractor.swift in Sources */,
+				143DA21B249B537800EEBF55 /* EditItemCoordinator.swift in Sources */,
+				14B7F117249C3E26002D290D /* UIColor+Extensions.swift in Sources */,
+				14B7F123249DE7B3002D290D /* Enclave.xcdatamodeld in Sources */,
 				143DA1F2249B2F0100EEBF55 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -469,6 +573,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		14B7F121249DE7B3002D290D /* Enclave.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				14B7F122249DE7B3002D290D /* Enclave.xcdatamodel */,
+			);
+			currentVersion = 14B7F122249DE7B3002D290D /* Enclave.xcdatamodel */;
+			path = Enclave.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 143DA1E4249B2F0100EEBF55 /* Project object */;
 }
