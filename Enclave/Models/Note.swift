@@ -23,14 +23,9 @@ struct Note {
   }
   let created: Date
   var lastModified: Date
-  var content: String {
-    willSet {
-      hasBeenModified = (content != newValue) || hasBeenModified
-    }
-  }
   var cyphertext: NSData
   
-  var hasBeenModified: Bool = false
+  private(set) var hasBeenModified: Bool = false
   
   var plaintext: String {
     get {
@@ -41,7 +36,8 @@ struct Note {
       }
     }
     set {
-      do  {
+      do {
+        hasBeenModified = (plaintext != newValue) || hasBeenModified
         cyphertext = try SecureEnclave.shared.encrypt(plainText: newValue)
       } catch {
         return
@@ -55,7 +51,6 @@ struct Note {
     self.color = color
     self.created = created
     self.lastModified = lastModified
-    self.content = content
     self.cyphertext = cyphertext
   }
   
@@ -70,7 +65,6 @@ struct Note {
     self.color = UIColor(hex: hex)
     self.created = managedObject.value(forKey: "created") as? Date ?? Date()
     self.lastModified = managedObject.value(forKey: "lastModified") as? Date ?? Date()
-    self.content = managedObject.value(forKey: "content") as? String ?? ""
     self.cyphertext = managedObject.value(forKey: "cyphertext") as? NSData ?? NSData()
   }
   
@@ -80,7 +74,6 @@ struct Note {
     managedObject.setValue(color.toHex(), forKey: "color")
     managedObject.setValue(created, forKey: "created")
     managedObject.setValue(lastModified, forKey: "lastModified")
-    managedObject.setValue(content, forKey: "content")
     managedObject.setValue(cyphertext, forKey: "cyphertext")
   }
 }

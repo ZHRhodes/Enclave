@@ -99,11 +99,6 @@ final class EditItemViewController: UIViewController {
     dateLabel.textColor = .secondaryText
     dateLabel.translatesAutoresizingMaskIntoConstraints = false
     
-    if let ct = try? SecureEnclave.shared.encrypt(plainText: ".This is a test!") {
-      print(try? SecureEnclave.shared.decrypt(cyphertext: ct))
-    }
-    
-    
     view.addSubview(dateLabel)
     
     let constraints = [
@@ -117,7 +112,7 @@ final class EditItemViewController: UIViewController {
   private func configureTextField() {
     textView.font = .customRegularFont(ofSize: 16)
     textView.tintColor = .secondaryText
-    textView.text = interactor.note.content
+    textView.text = interactor.note.plaintext
     textView.backgroundColor = .primaryBackground
     textView.translatesAutoresizingMaskIntoConstraints = false
     
@@ -149,7 +144,7 @@ final class EditItemViewController: UIViewController {
 extension EditItemViewController: UIAdaptivePresentationControllerDelegate {
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
     interactor.note.title = titleTextField.text
-    interactor.note.content = textView.text
+    interactor.note.plaintext = textView.text
     if interactor.note.hasBeenModified {
       interactor.saveNote()
       delegate?.didFinishEditing(interactor.note)

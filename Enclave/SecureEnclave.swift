@@ -7,29 +7,32 @@
 //
 
 import Foundation
+import LocalAuthentication
+import UIKit
 
 enum KeyError: Error {
   case failedToDecrypt, unableToLoadKey
 }
 
-struct SecureEnclave {
-  static let shared = SecureEnclave()
+class SecureEnclave {
+  static var shared = SecureEnclave()
   
   private var privateKey: SecKey?
   private var publicKey: SecKey?
   
-  let keyTag = "LreHjoPkM5uUJl2lGVL3"
+  let keyTag = "LreHjoPkMd5uUJl7lGVI4"
   
-  let access =
+  lazy var access =
   SecAccessControlCreateWithFlags(kCFAllocatorDefault,
                                   kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
-                                  [.privateKeyUsage],//, .biometryCurrentSet],
+                                  [.privateKeyUsage, .userPresence],
                                   nil)!   // Ignore error
   
   lazy var attributes: [String: Any] = {
     var attributes: [String: Any] = [
       kSecAttrKeyType as String:            kSecAttrKeyTypeEC,
       kSecAttrKeySizeInBits as String:      256,
+      kSecUseAuthenticationContext as String: context,
       kSecPrivateKeyAttrs as String: [
         kSecAttrIsPermanent as String:      true,
         kSecAttrApplicationTag as String:   keyTag,
@@ -45,7 +48,7 @@ struct SecureEnclave {
     return attributes
   }()
   
-  init() {
+  private func getKeys() {
     do {
       try loadKey()
     } catch {
@@ -57,7 +60,12 @@ struct SecureEnclave {
     }
   }
   
-  mutating private func createKey() throws {
+  func dropKeys() {
+    privateKey = nil
+    publicKey = nil
+  }
+  
+  private func createKey() throws {
     var error: Unmanaged<CFError>?
     guard let privateKey = SecKeyCreateRandomKey(attributes as CFDictionary, &error) else {
         throw error!.takeRetainedValue() as Error
@@ -67,9 +75,19 @@ struct SecureEnclave {
     self.privateKey = privateKey
   }
   
-  mutating private func loadKey() throws {
+  private let context = LAContext()
+  
+  private func loadKey() throws {
     var key: CFTypeRef?
-    let status = SecItemCopyMatching(attributes as CFDictionary, &key)
+    let aatributes: [String: Any] = [
+      kSecClass as String: kSecClassKey,
+      kSecAttrApplicationTag as String: keyTag,
+      kSecAttrKeyType as String: kSecAttrKeyTypeEC,
+      kSecUseAuthenticationContext as String: context,
+      kSecReturnRef as String: true,
+      kSecAttrAccessControl as String: access
+    ]
+    let status = SecItemCopyMatching(aatributes as CFDictionary, &key)
     
     guard status == errSecSuccess else {
       throw KeyError.unableToLoadKey
@@ -81,6 +99,9 @@ struct SecureEnclave {
   }
   
   func encrypt(plainText: String) throws -> NSData {
+    if publicKey == nil {
+      getKeys()
+    }
     guard let publicKey = publicKey else { throw NSError() }
     var error: Unmanaged<CFError>?
     guard let cyphertext = SecKeyCreateEncryptedData(publicKey,
@@ -95,6 +116,9 @@ struct SecureEnclave {
   }
   
   func decrypt(cyphertext: NSData) throws -> String {
+    if privateKey == nil {
+      getKeys()
+    }
     guard let privateKey = privateKey else { throw NSError() }
     var error: Unmanaged<CFError>?
     guard let plaintextData = SecKeyCreateDecryptedData(privateKey, .eciesEncryptionCofactorX963SHA256AESGCM, cyphertext, &error) else {

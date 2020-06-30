@@ -43,6 +43,16 @@ class ColorPicker: UIView {
     configure()
   }
   
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+
+    if #available(iOS 13.0, *) {
+      if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+        updateLayers(for: traitCollection.userInterfaceStyle)
+      }
+    }
+  }
+  
   override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
     for subview in subviews as [UIView] {
       if !subview.isHidden
@@ -76,6 +86,11 @@ class ColorPicker: UIView {
     let button = UIButton()
     button.backgroundColor = color
     button.layer.cornerRadius = 4
+    button.clipsToBounds = false
+    button.layer.shadowColor = UIColor(red: 0.77, green: 0.77, blue: 0.77, alpha: 0.8).cgColor
+    button.layer.shadowOpacity = traitCollection.userInterfaceStyle == .light ? 1.0 : 0.0
+    button.layer.shadowRadius = 2.0
+    button.layer.shadowOffset = CGSize(width: 0, height: 2)
     button.addTarget(self, action: #selector(newColorTapped), for: .touchUpInside)
     if color.toHex() == selectedColor.toHex() {
       button.layer.borderWidth = 2.0
@@ -99,6 +114,12 @@ class ColorPicker: UIView {
       }
       pt.x = backgroundContainer.frame.minX + padding
       pt.y += boxSize + padding
+    }
+  }
+  
+  private func updateLayers(for style: UIUserInterfaceStyle) {
+    colorButtons.forEach { button in
+      button.layer.shadowOpacity = style == .light ? 1.0 : 0.0
     }
   }
   
