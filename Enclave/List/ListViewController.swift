@@ -23,10 +23,6 @@ final class ListViewController: UIViewController {
     configureTableView()
   }
   
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-  }
-  
   private func configureNavigationController() {
     guard let navigationBar = navigationController?.navigationBar else { return }
 
@@ -38,7 +34,9 @@ final class ListViewController: UIViewController {
       
     let addButton = UIButton()
     addButton.layer.cornerRadius = 4
-    addButton.backgroundColor = UIColor.randomAccent()
+    let image = UIImage(named: "Compose")?.withRenderingMode(.alwaysTemplate)
+    addButton.setImage(image, for: .normal)
+    addButton.tintColor = .titleText
     addButton.translatesAutoresizingMaskIntoConstraints = false
     addButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
     
@@ -47,8 +45,8 @@ final class ListViewController: UIViewController {
     let constraints = [
       addButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -16),
       addButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -12),
-      addButton.heightAnchor.constraint(equalToConstant: 30),
-      addButton.widthAnchor.constraint(equalToConstant: 30)
+      addButton.heightAnchor.constraint(equalToConstant: 25),
+      addButton.widthAnchor.constraint(equalToConstant: 25)
     ]
     
     NSLayoutConstraint.activate(constraints)
@@ -77,17 +75,24 @@ final class ListViewController: UIViewController {
   
   @objc
   private func addTapped() {
-    let newNote = interactor.addNote()
-    coordinator.presentEditItem(with: newNote)
+    coordinator.presentEditItem(with: Note())
   }
   
   func updatedNote(_ note: Note) {
-    guard let index = interactor.notes.firstIndex(where: { $0.id == note.id }) else { return }
-    interactor.notes[index] = note
-    if index == tableView.visibleCells.count {
-      tableView.reloadData()
+    var existingIndex = interactor.notes.firstIndex(where: { $0.id == note.id })
+    let updatingExising = existingIndex != nil
+    if updatingExising {
+      interactor.notes[existingIndex!] = note
     } else {
-      tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+      interactor.notes.append(note)
+      existingIndex = interactor.notes.endIndex.advanced(by: -1)
+    }
+
+    if updatingExising {
+      tableView.moveRow(at: IndexPath(row: existingIndex!, section: 0), to: IndexPath(row: 0, section: 0))
+      tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+    } else {
+      tableView.reloadData()
     }
   }
 }

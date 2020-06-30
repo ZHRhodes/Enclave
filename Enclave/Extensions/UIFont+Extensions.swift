@@ -16,4 +16,8 @@ extension UIFont {
   static func customRegularFont(ofSize size: CGFloat) -> UIFont {
     return UIFont.init(name: "HelveticaNeue", size: size)!
   }
+  
+  static func customItalicFont(ofSize size: CGFloat) -> UIFont {
+    return UIFont.init(name: "HelveticaNeue-Italic", size: size)!
+  }
 }

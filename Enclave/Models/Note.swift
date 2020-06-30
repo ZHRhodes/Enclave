@@ -11,12 +11,26 @@ import CoreData
 
 struct Note {
   let id: String
-  var title: String
-  var color: UIColor
+  var title: String {
+    willSet {
+      hasBeenModified = (title != newValue) || hasBeenModified
+    }
+  }
+  var color: UIColor {
+    willSet {
+      hasBeenModified = (color != newValue) || hasBeenModified
+    }
+  }
   let created: Date
-  let lastModified: Date
-  var content: String
+  var lastModified: Date
+  var content: String {
+    willSet {
+      hasBeenModified = (content != newValue) || hasBeenModified
+    }
+  }
   var cyphertext: NSData
+  
+  var hasBeenModified: Bool = false
   
   var plaintext: String {
     get {
@@ -60,7 +74,7 @@ struct Note {
     self.cyphertext = managedObject.value(forKey: "cyphertext") as? NSData ?? NSData()
   }
   
-  func setProperties(in managedObject: NSManagedObject) {
+  mutating func setProperties(in managedObject: NSManagedObject) {
     managedObject.setValue(id, forKey: "id")
     managedObject.setValue(title, forKey: "title")
     managedObject.setValue(color.toHex(), forKey: "color")
@@ -68,5 +82,15 @@ struct Note {
     managedObject.setValue(lastModified, forKey: "lastModified")
     managedObject.setValue(content, forKey: "content")
     managedObject.setValue(cyphertext, forKey: "cyphertext")
+  }
+}
+
+@propertyWrapper struct NewestFirst {
+  var wrappedValue: Array<Note> {
+    didSet {
+      wrappedValue = wrappedValue.sorted(by: { (n0, n1) -> Bool in
+        return n0.lastModified > n1.lastModified
+      })
+    }
   }
 }

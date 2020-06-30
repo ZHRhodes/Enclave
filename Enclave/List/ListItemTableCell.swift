@@ -28,9 +28,19 @@ final class ListItemTableCell: UITableViewCell {
     configureLayout()
   }
   
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+
+    if #available(iOS 13.0, *) {
+      if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+        updateLayer(for: traitCollection.userInterfaceStyle)
+      }
+    }
+  }
+  
   func configure(with note: Note) {
     titleLabel.text = note.title
-    dateLabel.text = DateFormatter.shorthandMonthDayYear.string(from: note.created)
+    dateLabel.text = DateFormatter.shorthandMonthDayYearTime.string(from: note.lastModified)
     containerView.backgroundColor = note.color
   }
   
@@ -41,11 +51,13 @@ final class ListItemTableCell: UITableViewCell {
     configureStackView()
     configureTitleLabel()
     configureDateLabel()
+    updateLayer(for: traitCollection.userInterfaceStyle)
   }
   
   private func configureContainerView() {
     containerView.layer.cornerRadius = 4
     containerView.translatesAutoresizingMaskIntoConstraints = false
+//    containerView.backgroundColor = .white
     
     contentView.addSubview(containerView)
     
@@ -77,6 +89,7 @@ final class ListItemTableCell: UITableViewCell {
   }
   
   private func configureTitleLabel() {
+    titleLabel.font = .customRegularFont(ofSize: 17)
     titleLabel.textColor = .primaryText
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
     
@@ -86,8 +99,20 @@ final class ListItemTableCell: UITableViewCell {
   private func configureDateLabel() {
     dateLabel.translatesAutoresizingMaskIntoConstraints = false
     dateLabel.textColor = .secondaryText
-    dateLabel.font = UIFont.italicSystemFont(ofSize: 14)
+    dateLabel.font = .customItalicFont(ofSize: 13)
     
     stack.addArrangedSubview(dateLabel)
+  }
+  
+  private func updateLayer(for style: UIUserInterfaceStyle) {
+    if style == .light {
+      containerView.clipsToBounds = false
+      containerView.layer.shadowColor = UIColor(red: 0.77, green: 0.77, blue: 0.77, alpha: 0.8).cgColor
+      containerView.layer.shadowOpacity = 1.0
+      containerView.layer.shadowRadius = 3.0
+      containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+    } else {
+      containerView.layer.shadowOpacity = 0.0
+    }
   }
 }

@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 
 protocol EditItemViewControllerDelegate: class {
-  func didFinishEditing(_ note: Note)
+  func didFinishEditing(_ note: Note?)
 }
 
 final class EditItemViewController: UIViewController {
   private let titleTextField = UITextView()
-  private let colorButton = ColorPicker()
+  private let colorPicker = ColorPicker()
   private let dateLabel = UILabel()
   private let textView = UITextView()
   
@@ -46,6 +46,16 @@ final class EditItemViewController: UIViewController {
     textView.becomeFirstResponder()
   }
   
+  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+
+    if #available(iOS 13.0, *) {
+      if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+        updateLayer(for: traitCollection.userInterfaceStyle)
+      }
+    }
+  }
+  
   private func configureTitleLabel() {
     titleTextField.text = interactor.note.title
     titleTextField.tintColor = .secondaryText
@@ -66,17 +76,18 @@ final class EditItemViewController: UIViewController {
   }
   
   private func configureColorButton() {
-    colorButton.translatesAutoresizingMaskIntoConstraints = false
-    colorButton.selectedColor = interactor.note.color
-//    colorButton.addTarget(self, action: #selector(colorButtonTapped), for: .touchUpInside)
+    colorPicker.translatesAutoresizingMaskIntoConstraints = false
+    colorPicker.selectedColor = interactor.note.color
+    colorPicker.delegate = self
+    updateLayer(for: traitCollection.userInterfaceStyle)
     
-    view.addSubview(colorButton)
+    view.addSubview(colorPicker)
     
     let constraints = [
-      colorButton.topAnchor.constraint(equalTo: titleTextField.topAnchor, constant: 7),
-      colorButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -sideMargin),
-      colorButton.heightAnchor.constraint(equalToConstant: 25),
-      colorButton.widthAnchor.constraint(equalToConstant: 25) //will have to remove these height and width constraints
+      colorPicker.topAnchor.constraint(equalTo: titleTextField.topAnchor, constant: 7),
+      colorPicker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -sideMargin),
+      colorPicker.heightAnchor.constraint(equalToConstant: 25),
+      colorPicker.widthAnchor.constraint(equalToConstant: 25)
     ]
     
     NSLayoutConstraint.activate(constraints)
@@ -84,7 +95,7 @@ final class EditItemViewController: UIViewController {
   
   private func configureDateLabel() {
     dateLabel.text = DateFormatter.monthDayYear.string(from: interactor.note.created)
-    dateLabel.font = UIFont.systemFont(ofSize: 16)
+    dateLabel.font = UIFont.customRegularFont(ofSize: 16)
     dateLabel.textColor = .secondaryText
     dateLabel.translatesAutoresizingMaskIntoConstraints = false
     
@@ -104,7 +115,7 @@ final class EditItemViewController: UIViewController {
   }
   
   private func configureTextField() {
-    textView.font = UIFont.systemFont(ofSize: 16)
+    textView.font = .customRegularFont(ofSize: 16)
     textView.tintColor = .secondaryText
     textView.text = interactor.note.content
     textView.backgroundColor = .primaryBackground
@@ -122,9 +133,16 @@ final class EditItemViewController: UIViewController {
     NSLayoutConstraint.activate(constraints)
   }
   
-  @objc
-  private func colorButtonTapped() {
-    
+  private func updateLayer(for style: UIUserInterfaceStyle) {
+    if style == .light {
+      colorPicker.clipsToBounds = false
+      colorPicker.layer.shadowColor = UIColor(red: 0.77, green: 0.77, blue: 0.77, alpha: 0.8).cgColor
+      colorPicker.layer.shadowOpacity = 1.0
+      colorPicker.layer.shadowRadius = 2.0
+      colorPicker.layer.shadowOffset = CGSize(width: 0, height: 2)
+    } else {
+      colorPicker.layer.shadowOpacity = 0.0
+    }
   }
 }
 
@@ -132,7 +150,17 @@ extension EditItemViewController: UIAdaptivePresentationControllerDelegate {
   func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
     interactor.note.title = titleTextField.text
     interactor.note.content = textView.text
-    interactor.saveNote()
-    delegate?.didFinishEditing(interactor.note)
+    if interactor.note.hasBeenModified {
+      interactor.saveNote()
+      delegate?.didFinishEditing(interactor.note)
+    } else {
+      delegate?.didFinishEditing(nil)
+    }
+  }
+}
+
+extension EditItemViewController: ColorPickerDelegate {
+  func selectedColor(_ color: UIColor) {
+    interactor.note.color = color
   }
 }

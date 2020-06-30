@@ -13,7 +13,7 @@ import CoreData
 struct EditItemInteractor {
   var note: Note
   
-  func saveNote() {
+  mutating func saveNote() {
     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     let managedContext = appDelegate.persistentContainer.viewContext
     
@@ -22,6 +22,7 @@ struct EditItemInteractor {
 
     do {
       guard let results = try managedContext.fetch(fetchRequest) as? [NSManagedObject] else { return }
+      note.lastModified = Date()
       if results.count != 0 {
         let managedNote = results[0]
         note.setProperties(in: managedNote)

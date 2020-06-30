@@ -8,8 +8,9 @@
 
 import UIKit
 
-//TODO
-//Make the background view basically root frame, so the whole view grows and shrinks instead of leaving the bounds of the parent
+protocol ColorPickerDelegate: class {
+  func selectedColor(_ color: UIColor)
+}
 
 class ColorPicker: UIView {
   private let selectedColorView = UIView()
@@ -22,6 +23,7 @@ class ColorPicker: UIView {
   }
   var colors: [UIColor] = UIColor.accents
   var colorButtons: [UIButton] = []
+  weak var delegate: ColorPickerDelegate?
   
   private let boxSize: CGFloat = 30.0
   private lazy var padding: CGFloat = boxSize/2
@@ -41,6 +43,18 @@ class ColorPicker: UIView {
     configure()
   }
   
+  override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+    for subview in subviews as [UIView] {
+      if !subview.isHidden
+        && subview.alpha > 0
+        && subview.isUserInteractionEnabled
+        && subview.point(inside: convert(point, to: subview), with: event) {
+          return true
+      }
+    }
+    return false
+  }
+  
   private func configure() {
     isUserInteractionEnabled = true
     selectedColorView.isUserInteractionEnabled = true
@@ -52,7 +66,7 @@ class ColorPicker: UIView {
     selectedColorView.frame = CGRect(x: 0, y: 0, width: boxSize, height: boxSize)
     
     backgroundContainer.translatesAutoresizingMaskIntoConstraints = true
-    backgroundContainer.backgroundColor = .darkGray
+    backgroundContainer.backgroundColor = .colorPickerBackground
     backgroundContainer.layer.cornerRadius = 6
     backgroundContainer.frame = selectedColorView.frame
     insertSubview(backgroundContainer, at: 0)
@@ -111,6 +125,7 @@ class ColorPicker: UIView {
     colorButtons = []
     if let backgroundColor = sender.backgroundColor {
       selectedColor = backgroundColor
+      delegate?.selectedColor(backgroundColor)
     }
   }
 }

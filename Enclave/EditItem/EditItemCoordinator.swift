@@ -28,9 +28,9 @@ final class EditItemCoordinator {
 }
 
 extension EditItemCoordinator: EditItemViewControllerDelegate {
-  func didFinishEditing(_ note: Note) {
-    parentViewController?.dismiss(animated: true, completion: {
-      self.delegate?.didFinishEditingNote(note)
-    })
+  func didFinishEditing(_ note: Note?) {
+      if let note = note {
+        self.delegate?.didFinishEditingNote(note)
+      }
   }
 }

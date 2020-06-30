@@ -15,9 +15,9 @@ extension DateFormatter {
     return formatter
   }()
   
-  static let shorthandMonthDayYear: DateFormatter = {
+  static let shorthandMonthDayYearTime: DateFormatter = {
     let formatter = DateFormatter()
-    formatter.dateFormat = "M/d/yy"
+    formatter.dateFormat = "M/d/yy h:mma"
     return formatter
   }()
 }

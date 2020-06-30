@@ -11,16 +11,10 @@ import UIKit
 import CoreData
 
 struct ListViewInteractor {
-  var notes: [Note] = []
+  @NewestFirst var notes: [Note] = []
   
   init() {
     fetchNotes()
-  }
-  
-  mutating func addNote() -> Note {
-    let newNote = Note()
-    notes.append(newNote)
-    return newNote
   }
   
   mutating private func fetchNotes() {

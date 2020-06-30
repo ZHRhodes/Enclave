@@ -18,8 +18,9 @@ extension UIColor {
   static let accentThree = UIColor(named: "accentThree")!
   static let accentFour = UIColor(named: "accentFour")!
   static let accentFive = UIColor(named: "accentFive")!
+  static let colorPickerBackground = UIColor(named: "colorPickerBackground")
   
-  static let accents: [UIColor] = [.accentTwo, .accentThree, .accentFour, .accentFive]
+  static let accents: [UIColor] = [.accentOne, .accentTwo, .accentThree, .accentFour]
   
   static func randomAccent() -> UIColor {
     return accents.randomElement()!
