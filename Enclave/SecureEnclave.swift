@@ -15,10 +15,11 @@ enum KeyError: Error {
 }
 
 class SecureEnclave {
-  static var shared = SecureEnclave()
+  static let shared = SecureEnclave()
   
   private var privateKey: SecKey?
   private var publicKey: SecKey?
+  private var context = LAContext()
   
   let keyTag = "LreHjoPkMd5uUJl7lGVI4"
   
@@ -63,6 +64,7 @@ class SecureEnclave {
   func dropKeys() {
     privateKey = nil
     publicKey = nil
+    context = LAContext()
   }
   
   private func createKey() throws {
@@ -74,8 +76,6 @@ class SecureEnclave {
     publicKey = SecKeyCopyPublicKey(privateKey)
     self.privateKey = privateKey
   }
-  
-  private let context = LAContext()
   
   private func loadKey() throws {
     var key: CFTypeRef?
@@ -108,7 +108,6 @@ class SecureEnclave {
                                                .eciesEncryptionCofactorX963SHA256AESGCM,
                                                plainText.data(using: .utf8)! as CFData,
                                                &error) else {
-                                                print(error)
                                                 throw error!.takeRetainedValue() as Error
     }
 
@@ -122,7 +121,6 @@ class SecureEnclave {
     guard let privateKey = privateKey else { throw NSError() }
     var error: Unmanaged<CFError>?
     guard let plaintextData = SecKeyCreateDecryptedData(privateKey, .eciesEncryptionCofactorX963SHA256AESGCM, cyphertext, &error) else {
-      print(error)
       throw error!.takeRetainedValue() as Error
     }
     
