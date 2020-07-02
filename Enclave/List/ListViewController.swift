@@ -119,4 +119,16 @@ extension ListViewController: UITableViewDelegate {
     let item = interactor.notes[indexPath.row]
     coordinator.presentEditItem(with: item)
   }
+  
+  func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (_, _, _) in
+      self?.interactor.deleteNote(at: indexPath.row)
+      tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+
+    let image = UIImage(named: "Delete")?.withTintColor(.titleText)
+    deleteAction.image = image
+    deleteAction.backgroundColor = .primaryBackground
+    return UISwipeActionsConfiguration(actions: [deleteAction])
+  }
 }
