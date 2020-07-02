@@ -14,6 +14,8 @@ protocol EditItemViewControllerDelegate: class {
 }
 
 final class EditItemViewController: UIViewController {
+  private let scrollView = UIScrollView()
+  private let contentView = UIView()
   private let titleTextField = UITextView()
   private let colorPicker = ColorPicker()
   private let dateLabel = UILabel()
@@ -35,15 +37,22 @@ final class EditItemViewController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = .primaryBackground
     presentationController?.delegate = self
+    let notificationCenter = NotificationCenter.default
+    notificationCenter.addObserver(self, selector: #selector(adjustInsetForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+    notificationCenter.addObserver(self, selector: #selector(adjustInsetForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    configureScrollView()
+    configureContentView()
     configureTitleLabel()
     configureDateLabel()
-    configureTextField()
+    configureTextView()
     configureColorButton()
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    textView.becomeFirstResponder()
+    if textView.text.isEmpty {
+      textView.becomeFirstResponder()
+    }
   }
   
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -56,6 +65,36 @@ final class EditItemViewController: UIViewController {
     }
   }
   
+  private func configureScrollView() {
+    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    scrollView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: 0, right: 0)
+    view.addSubview(scrollView)
+    
+    let constraints = [
+      scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+      scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+      scrollView.leftAnchor.constraint(equalTo: view.leftAnchor)
+    ]
+    
+    NSLayoutConstraint.activate(constraints)
+  }
+  
+  private func configureContentView() {
+    contentView.translatesAutoresizingMaskIntoConstraints = false
+    scrollView.addSubview(contentView)
+    
+    let constraints = [
+      contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+      contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+      contentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+      contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+      contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+    ]
+    
+    NSLayoutConstraint.activate(constraints)
+  }
+  
   private func configureTitleLabel() {
     titleTextField.text = interactor.note.title
     titleTextField.tintColor = .secondaryText
@@ -64,12 +103,12 @@ final class EditItemViewController: UIViewController {
     titleTextField.backgroundColor = .primaryBackground
     titleTextField.translatesAutoresizingMaskIntoConstraints = false
     
-    view.addSubview(titleTextField)
+    contentView.addSubview(titleTextField)
     
     let constraints = [
-      titleTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-      titleTextField.leftAnchor.constraint(equalTo: view.leftAnchor, constant: sideMargin),
-      titleTextField.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -sideMargin*3),
+      titleTextField.topAnchor.constraint(equalTo: contentView.topAnchor),
+      titleTextField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: sideMargin),
+      titleTextField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -sideMargin*3),
     ]
     
     NSLayoutConstraint.activate(constraints)
@@ -81,11 +120,11 @@ final class EditItemViewController: UIViewController {
     colorPicker.delegate = self
     updateLayer(for: traitCollection.userInterfaceStyle)
     
-    view.addSubview(colorPicker)
+    contentView.addSubview(colorPicker)
     
     let constraints = [
       colorPicker.topAnchor.constraint(equalTo: titleTextField.topAnchor, constant: 7),
-      colorPicker.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -sideMargin),
+      colorPicker.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -sideMargin),
       colorPicker.heightAnchor.constraint(equalToConstant: 25),
       colorPicker.widthAnchor.constraint(equalToConstant: 25)
     ]
@@ -99,7 +138,7 @@ final class EditItemViewController: UIViewController {
     dateLabel.textColor = .secondaryText
     dateLabel.translatesAutoresizingMaskIntoConstraints = false
     
-    view.addSubview(dateLabel)
+    contentView.addSubview(dateLabel)
     
     let constraints = [
       dateLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 14),
@@ -109,20 +148,22 @@ final class EditItemViewController: UIViewController {
     NSLayoutConstraint.activate(constraints)
   }
   
-  private func configureTextField() {
+  private func configureTextView() {
     textView.font = .customRegularFont(ofSize: 16)
     textView.tintColor = .secondaryText
     textView.text = interactor.note.plaintext
     textView.backgroundColor = .primaryBackground
+    textView.isScrollEnabled = false
     textView.translatesAutoresizingMaskIntoConstraints = false
     
-    view.addSubview(textView)
+    contentView.addSubview(textView)
     
     let constraints = [
       textView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 16),
       textView.leftAnchor.constraint(equalTo: titleTextField.leftAnchor),
-      textView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -sideMargin),
-      textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+      textView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -sideMargin),
+      textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+      textView.heightAnchor.constraint(greaterThanOrEqualToConstant: 600)
     ]
     
     NSLayoutConstraint.activate(constraints)
@@ -138,6 +179,21 @@ final class EditItemViewController: UIViewController {
     } else {
       colorPicker.layer.shadowOpacity = 0.0
     }
+  }
+  
+  @objc private func adjustInsetForKeyboard(notification: Notification) {
+    guard let keyboardValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+
+    let keyboardScreenEndFrame = keyboardValue.cgRectValue
+    let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+
+    if notification.name == UIResponder.keyboardWillHideNotification {
+        scrollView.contentInset = .zero
+    } else {
+        scrollView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+    }
+
+    scrollView.scrollIndicatorInsets = scrollView.contentInset
   }
 }
 
