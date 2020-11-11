@@ -25,6 +25,7 @@ final class EditItemViewController: UIViewController {
   private weak var delegate: EditItemViewControllerDelegate?
   
   private lazy var sideMargin: CGFloat = view.frame.width/16
+  private let topMargin: CGFloat = 32.0
   
   static func makeInstance(with interactor: EditItemInteractor, delegate: EditItemViewControllerDelegate) -> EditItemViewController {
     let vc = EditItemViewController(nibName: nil, bundle: nil)
@@ -37,9 +38,7 @@ final class EditItemViewController: UIViewController {
     super.viewDidLoad()
     view.backgroundColor = .primaryBackground
     presentationController?.delegate = self
-    let notificationCenter = NotificationCenter.default
-    notificationCenter.addObserver(self, selector: #selector(adjustInsetForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
-    notificationCenter.addObserver(self, selector: #selector(adjustInsetForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+    configureObservers()
     configureScrollView()
     configureContentView()
     configureTitleLabel()
@@ -65,9 +64,15 @@ final class EditItemViewController: UIViewController {
     }
   }
   
+  private func configureObservers() {
+    let notificationCenter = NotificationCenter.default
+    notificationCenter.addObserver(self, selector: #selector(adjustInsetForKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+    notificationCenter.addObserver(self, selector: #selector(adjustInsetForKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+  }
+
   private func configureScrollView() {
     scrollView.translatesAutoresizingMaskIntoConstraints = false
-    scrollView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: 0, right: 0)
+    scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
     view.addSubview(scrollView)
     
     let constraints = [
@@ -188,9 +193,9 @@ final class EditItemViewController: UIViewController {
     let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
 
     if notification.name == UIResponder.keyboardWillHideNotification {
-        scrollView.contentInset = .zero
+        scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: 0, right: 0)
     } else {
-        scrollView.contentInset = UIEdgeInsets(top: 32, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
+        scrollView.contentInset = UIEdgeInsets(top: topMargin, left: 0, bottom: keyboardViewEndFrame.height - view.safeAreaInsets.bottom, right: 0)
     }
 
     scrollView.scrollIndicatorInsets = scrollView.contentInset
