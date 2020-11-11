@@ -1,4 +1,4 @@
 # Enclave
-Secure notes for the hyper-paranoid
+Hyper-secure notes for the most sensitive content.
 
-For support, please contact zhrhodes@gmail.com
+For support, please contact zhrhodes@gmail.com.
