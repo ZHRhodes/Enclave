@@ -1,4 +1,4 @@
-For support, please contact zhrhodes2@gmail.com.
+For support, please contact zhrhodes@gmail.com.
 
 Privacy Policy:
 The personal data you store in Enclave is not and cannot be collected, used, saved, or accessed by the developers of this application. This application does not transmit any of your personal information or data off device. 
